@@ -1,0 +1,35 @@
+{
+  "name": "v8-code-dump-filter",
+  "version": "0.0.0",
+  "description": "Filter v8 --print-code and --print-opt-code output",
+  "author": "Eugene Sharygin <eush77@gmail.com>",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "v8-code-dump-filter": "cli.js"
+  },
+  "homepage": "https://github.com/eush77/v8-code-dump-filter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eush77/v8-code-dump-filter"
+  },
+  "bugs": {
+    "url": "https://github.com/eush77/v8-code-dump-filter/issues"
+  },
+  "keywords": [
+    "v8",
+    "dump",
+    "asm",
+    "filter",
+    "cli",
+    "optimization",
+    "code",
+    "optimized",
+    "unoptimized"
+  ],
+  "dependencies": {
+    "map-keys": "^1.0.0",
+    "yargs": "^3.9.0"
+  },
+  "devDependencies": {}
+}
