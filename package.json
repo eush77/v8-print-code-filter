@@ -1,6 +1,6 @@
 {
   "name": "v8-print-code-filter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Filter v8 --print-code / --print-opt-code output",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
