@@ -8,9 +8,6 @@
   "bin": {
     "v8-print-code-filter": "cli.js"
   },
-  "scripts": {
-    "example": "./cli.js --name fs.writeSync example/print_code"
-  },
   "homepage": "https://github.com/eush77/v8-print-code-filter",
   "repository": {
     "type": "git",
