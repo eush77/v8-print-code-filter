@@ -29,6 +29,8 @@
   ],
   "dependencies": {
     "map-keys": "^1.0.0",
+    "parse-concat-stream": "^0.2.0",
+    "v8-code-dump-parser": "^0.1.0",
     "yargs": "^3.9.0"
   },
   "devDependencies": {}
