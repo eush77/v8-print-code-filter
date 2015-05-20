@@ -16,22 +16,21 @@ var argv = mapKeys(yargs
                    });
 
 
-if (argv._.length > 1) {
+if (argv._.length > 1 || process.argv.length == argv._.length + 2) {
   console.log(yargs.help());
   process.exit(1);
 }
 
-var inputStream = argv._.length ? fs.createReadStream(argv._[0]) : process.stdin;
+(argv._.length ? fs.createReadStream(argv._[0]) : process.stdin)
+  .pipe(concat({ parse: codeDumpParser }, function (err, sections) {
+    if (err) throw err;
 
-inputStream.pipe(concat({ parse: codeDumpParser }, function (err, sections) {
-  if (err) throw err;
-
-  sections = sections.filter(function (section) {
-    var code = section.code || section.optimizedCode;
-    return Object.keys(argv).some(function (key) {
-      return code[key] == argv[key];
+    sections = sections.filter(function (section) {
+      var code = section.code || section.optimizedCode;
+      return Object.keys(argv).some(function (key) {
+        return code[key] == argv[key];
+      });
     });
-  });
 
-  process.stdout.write(codeDumpParser.stringify(sections));
-}));
+    process.stdout.write(codeDumpParser.stringify(sections));
+  }));
