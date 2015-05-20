@@ -44,7 +44,12 @@ name = add
 ...
 ```
 
-Multiple expressions are ANDed, so that `--source-position=96 --optimization-id=4` selects entries with `source_position` equal to `96` and `optimization_id` equal to `4`.
+Two special values for numeric attributes are available:
+
+- `max` removes from selection all but entries with maximum value;
+- `min` removes all but entries with minimum value.
+
+Multiple expressions are applied in sequence, so that `--source-position=96 --optimization-id=max` selects entries with `source_position` equal to `96` and, among those, with maximum possible `optimization_id`.
 
 ## Install
 
