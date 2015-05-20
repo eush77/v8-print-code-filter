@@ -30,9 +30,12 @@ Options:
 
 Each `filter_expr` is a combination of an option key and value and describes a single attribute line.
 
-E.g. `--source-position=96` matches the following code section (among one that contains function source):
+E.g. `--source-position=96` matches the following code section:
 
 ```
+--- Raw source ---
+...
+
 --- Optimized code ---
 optimization_id = 1
 source_position = 96
@@ -41,7 +44,7 @@ name = add
 ...
 ```
 
-Multiple options are ORd, so that `--source-position=96 --source-position=144` matches either one.
+Multiple expressions are ANDed, so that `--source-position=96 --optimization-id=4` selects entries with `source_position` equal to `96` and `optimization_id` equal to `4`.
 
 ## Install
 

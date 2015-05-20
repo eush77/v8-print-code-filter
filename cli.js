@@ -27,8 +27,8 @@ if (argv._.length > 1 || process.argv.length == argv._.length + 2) {
 
     sections = sections.filter(function (section) {
       var code = section.code || section.optimizedCode;
-      return Object.keys(argv).some(function (key) {
-        return code[key] == argv[key];
+      return Object.keys(argv).every(function (key) {
+        return key == '$0' || key == '_' || key == 'help' || code[key] == argv[key];
       });
     });
 
