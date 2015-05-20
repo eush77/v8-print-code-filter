@@ -28,6 +28,21 @@ Options:
   --help  Show help  [boolean]
 ```
 
+Each `filter_expr` is a combination of an option key and value and describes a single attribute line.
+
+E.g. `--source-position=96` matches the following code section (among one that contains function source):
+
+```
+--- Optimized code ---
+optimization_id = 1
+source_position = 96
+kind = OPTIMIZED_FUNCTION
+name = add
+...
+```
+
+Multiple options are ORd, so that `--source-position=96 --source-position=144` matches either one.
+
 ## Install
 
 ```
