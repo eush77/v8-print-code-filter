@@ -1,36 +1,48 @@
 #!/usr/bin/env node
 'use strict';
 
-var yargs = require('yargs'),
-    mapKeys = require('map-keys'),
-    codeDumpParser = require('v8-code-dump-parser'),
-    concat = require('parse-concat-stream');
+var applyFilters = require('./');
+
+var optArray = require('opt-array');
 
 var fs = require('fs');
 
-var argv = mapKeys(yargs
-                   .usage('Usage:  $0 [filter_expr]... [file]')
-                   .help('help')
-                   .argv, function (key) {
-                     return key.replace(/-/g, '_');
-                   });
+
+var usage = function (code) {
+  console.log('Usage:  $0 [filter_expr]... [file]');
+  process.exit(code | 0);
+};
 
 
-if (argv._.length > 1 || process.argv.length == argv._.length + 2) {
-  console.log(yargs.help());
-  process.exit(1);
-}
+(function main(optv) {
+  var filters = [];
+  var input;
 
-(argv._.length ? fs.createReadStream(argv._[0]) : process.stdin)
-  .pipe(concat({ parse: codeDumpParser }, function (err, sections) {
-    if (err) throw err;
+  optv.forEach(function (opt) {
+    if (opt.option == 'help') {
+      return usage();
+    }
 
-    sections = sections.filter(function (section) {
-      var code = section.code || section.optimizedCode;
-      return Object.keys(argv).every(function (key) {
-        return key == '$0' || key == '_' || key == 'help' || code[key] == argv[key];
-      });
+    if (!opt.option) {
+      if (input) {
+        return usage(1);
+      }
+      else {
+        input = opt.value;
+        return;
+      }
+    }
+
+    filters.push({
+      key: opt.option.replace(/-/g, '_'),
+      value: opt.value
     });
+  });
 
-    process.stdout.write(codeDumpParser.stringify(sections));
-  }));
+  if (!filters.length) {
+    return usage(1);
+  }
+
+  input = input ? fs.createReadStream(input) : process.stdin;
+  applyFilters(input, filters, process.stdout);
+}(optArray(process.argv.slice(2))));
