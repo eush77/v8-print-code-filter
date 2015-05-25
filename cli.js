@@ -44,5 +44,9 @@ var usage = function (code) {
   }
 
   input = input ? fs.createReadStream(input) : process.stdin;
-  applyFilters(input, filters, process.stdout);
+  applyFilters(input, filters, process.stdout, function (warnings) {
+      warnings.forEach(function (warning) {
+        console.error('Warning: ' + warning);
+      });
+  });
 }(optArray(process.argv.slice(2))));
