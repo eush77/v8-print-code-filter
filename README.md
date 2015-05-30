@@ -23,9 +23,6 @@ $ v8-print-code-filter --source-position=96 example/print_opt_code
 
 ```
 Usage:  v8-print-code-filter [filter_expr]... [file]
-
-Options:
-  --help  Show help  [boolean]
 ```
 
 Each `filter_expr` is a combination of an option key and value and describes a single attribute line.
@@ -50,6 +47,12 @@ Two special values for numeric attributes are available:
 - `min` removes all but entries with minimum value.
 
 Multiple expressions are applied in sequence, so that `--source-position=96 --optimization-id=max` selects entries with `source_position` equal to `96` and, among those, with maximum possible `optimization_id`.
+
+## Related
+
+- [v8-print-code-highlighter] — dual JavaScript + ASM syntax highlighter for V8 dumps.
+
+[v8-print-code-highlighter]: https://github.com/eush77/v8-print-code-highlighter
 
 ## Install
 
