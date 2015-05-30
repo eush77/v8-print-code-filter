@@ -3,7 +3,9 @@
 
 var applyFilters = require('./');
 
-var optArray = require('opt-array');
+var optArray = require('opt-array'),
+    codeDumpParser = require('v8-code-dump-parser'),
+    concat = require('parse-concat-stream');
 
 var fs = require('fs');
 
@@ -43,10 +45,15 @@ var usage = function (code) {
     return usage(1);
   }
 
-  input = input ? fs.createReadStream(input) : process.stdin;
-  applyFilters(input, filters, process.stdout, function (warnings) {
-      warnings.forEach(function (warning) {
+  (input = input ? fs.createReadStream(input) : process.stdin)
+    .pipe(concat({ parse: codeDumpParser }, function (err, sections) {
+      if (err) throw err;
+
+      var onWarning = function (warning) {
         console.error('Warning: ' + warning);
-      });
-  });
+      };
+
+      sections = applyFilters(sections, filters, { onWarning: onWarning });
+      process.stdout.write(codeDumpParser.stringify(sections));
+    }));
 }(optArray(process.argv.slice(2))));

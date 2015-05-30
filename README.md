@@ -48,6 +48,18 @@ Two special values for numeric attributes are available:
 
 Multiple expressions are applied in sequence, so that `--source-position=96 --optimization-id=max` selects entries with `source_position` equal to `96` and, among those, with maximum possible `optimization_id`.
 
+## API
+
+### `sections = printCodeFilter(sections, filters, [opts])`
+
+- `sections` — parse tree in [v8-code-dump-parser][v8-code-dump-parser] format.
+- `filters` — array of `{key: 'key', value: 'value'}` objects.
+- `opts.onWarning(warning)` — optional callback for warning handling.
+
+Returns new section tree.
+
+[v8-code-dump-parser]: https://github.com/eush77/v8-code-dump-parser
+
 ## Related
 
 - [v8-print-code-highlighter] — dual JavaScript + ASM syntax highlighter for V8 dumps.

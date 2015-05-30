@@ -1,8 +1,5 @@
 'use strict';
 
-var codeDumpParser = require('v8-code-dump-parser'),
-    concat = require('parse-concat-stream');
-
 
 var code = function (section) {
   return section.code || section.optimizedCode;
@@ -45,36 +42,34 @@ var aggregate = {
 };
 
 
-module.exports = function (input, filters, output, cb) {
-  input.pipe(concat({ parse: codeDumpParser }, function (err, sections) {
-    if (err) throw err;
-    var warnings = [];
+module.exports = function (sections, filters, opts) {
+  opts = opts || {};
+  opts.onWarning = opts.onWarning || Function.prototype;
 
-    filters.forEach(function (filter) {
-      var applied = false;
-      var keyfn = function (section) {
-        var value = code(section)[filter.key];
-        if (value != null) {
-          applied = true;
-        }
-        return value;
-      };
-
-      if (aggregate.hasOwnProperty(filter.value)) {
-        sections = aggregate[filter.value](sections, keyfn);
+  filters.forEach(function (filter) {
+    var applied = false;
+    var keyfn = function (section) {
+      var value = code(section)[filter.key];
+      if (value != null) {
+        applied = true;
       }
-      else {
-        sections = sections.filter(function (section) {
-          return keyfn(section) == filter.value;
-        });
-      }
+      return value;
+    };
 
-      if (!applied) {
-        warnings.push('Filter on ' + filter.key + ' was not applied because no sections contain this property.');
-      }
-    });
+    if (aggregate.hasOwnProperty(filter.value)) {
+      sections = aggregate[filter.value](sections, keyfn);
+    }
+    else {
+      sections = sections.filter(function (section) {
+        return keyfn(section) == filter.value;
+      });
+    }
 
-    output.write(codeDumpParser.stringify(sections));
-    cb(warnings);
-  }));
+    if (!applied) {
+      opts.onWarning('Filter on ' + filter.key +
+                     ' was not applied because no sections contain this property.');
+    }
+  });
+
+  return sections;
 };
