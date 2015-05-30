@@ -47,6 +47,10 @@ module.exports = function (sections, filters, opts) {
   opts.onWarning = opts.onWarning || Function.prototype;
 
   filters.forEach(function (filter) {
+    if (!sections.length) {
+      return;
+    }
+
     var applied = false;
     var keyfn = function (section) {
       var value = code(section)[filter.key];
@@ -68,6 +72,9 @@ module.exports = function (sections, filters, opts) {
     if (!applied) {
       opts.onWarning('Filter on ' + filter.key +
                      ' was not applied because no sections contain this property.');
+    }
+    else if (!sections.length) {
+      opts.onWarning('Result set after filter on ' + filter.key + ' is empty.');
     }
   });
 
