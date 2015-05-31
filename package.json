@@ -33,6 +33,7 @@
     "unoptimized"
   ],
   "dependencies": {
+    "help-version": "^0.2.0",
     "opt-array": "^0.1.0",
     "parse-concat-stream": "^0.2.0",
     "v8-code-dump-parser": "^0.1.0"

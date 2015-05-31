@@ -3,17 +3,17 @@
 
 var applyFilters = require('./');
 
-var optArray = require('opt-array'),
+var help = require('help-version')(usage()).help,
+    optArray = require('opt-array'),
     codeDumpParser = require('v8-code-dump-parser'),
     concat = require('parse-concat-stream');
 
 var fs = require('fs');
 
 
-var usage = function (code) {
-  console.log('Usage:  $0 [filter_expr]... [file]');
-  process.exit(code | 0);
-};
+function usage() {
+  return 'Usage:  v8-print-code-filter [filter_expr]... [file]';
+}
 
 
 (function main(optv) {
@@ -21,13 +21,9 @@ var usage = function (code) {
   var input;
 
   optv.forEach(function (opt) {
-    if (opt.option == 'help') {
-      return usage();
-    }
-
     if (!opt.option) {
       if (input) {
-        return usage(1);
+        return help(1);
       }
       else {
         input = opt.value;
@@ -42,7 +38,7 @@ var usage = function (code) {
   });
 
   if (!filters.length) {
-    return usage(1);
+    return help(1);
   }
 
   (input = input ? fs.createReadStream(input) : process.stdin)
